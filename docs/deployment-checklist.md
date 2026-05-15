@@ -30,11 +30,15 @@ Private ZIP deploy. **Staging first** for any site currently on `biopentra-conta
 
 ---
 
-## Biopentra production (until migration)
+## Biopentra production
 
-**Default:** keep `biopentra-contact-inbox` active; deploy fixes via monorepo rsync to that folder only.
+**Cutover completed 2026-05-15:** production runs **`fluent-imap-support-desk`** v2.0.0 at `wp-content/plugins/fluent-imap-support-desk/`.
 
-When executing **Phase 3** rename migration, follow `docs/rename-migration-plan.md` (deactivate old → deploy new folder → activate).
+- Legacy folder moved aside: `wp-content/plugins/biopentra-contact-inbox.backup-2026-05-15-101126/` (remove after 7–14 stable days)
+- DB/options/tables/REST/capability names remain `biopentra_inbox_*` / `biopentra-support/v1` (compatibility)
+- Documented in monorepo: `biopentra-custom-plugins/docs/fluent-imap-support-desk-production-cutover.md`
+
+**Deploy fixes:** rsync from this repo → production `fluent-imap-support-desk/`, or release ZIP from `builds/`.
 
 ---
 

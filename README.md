@@ -35,11 +35,13 @@ This plugin is deployed as a **private ZIP**, not from WordPress.org.
 
 Upload via **Plugins → Add New → Upload**, or rsync the `fluent-imap-support-desk/` folder into `wp-content/plugins/`.
 
-## Production rename warning
+## Production status (Biopentra)
 
-**Biopentra production today** uses the folder slug `biopentra-contact-inbox` and plugin file `biopentra-contact-inbox.php`. **Do not rename production** until you follow `docs/rename-migration-plan.md` (staged cutover, backups, worker token, REST clients).
+**Folder cutover completed 2026-05-15:** production at `https://www.biopentra.eu` runs **`fluent-imap-support-desk`** v2.0.0. Legacy `biopentra-contact-inbox` is inactive (backup folder aside only).
 
-Installing this ZIP as `fluent-imap-support-desk` alongside the old folder would register a **second** plugin — avoid on production until migration.
+Internal compatibility (unchanged until a future major release): `biopentra_inbox_*` options/tables, REST `biopentra-support/v1`, capability `manage_biopentra_inbox`, admin menu slug `biopentra-inbox`.
+
+**Do not** activate both plugin folders at once. See `docs/rename-migration-plan.md` for history and `docs/deployment-checklist.md` for deploy steps.
 
 ## Development
 
