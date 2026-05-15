@@ -30,13 +30,12 @@ Private ZIP deploy. **Staging first** for any site currently on `biopentra-conta
 
 ---
 
-## Biopentra production
+## Example production site
 
-**Cutover completed 2026-05-15:** production runs **`fluent-imap-support-desk`** v2.0.0 at `wp-content/plugins/fluent-imap-support-desk/`.
+**Folder cutover (2026-05-15):** deploy as **`fluent-imap-support-desk`** v2.0.0 under `wp-content/plugins/fluent-imap-support-desk/`.
 
-- Legacy folder moved aside: `wp-content/plugins/biopentra-contact-inbox.backup-2026-05-15-101126/` (remove after 7–14 stable days)
-- DB/options/tables/REST/capability names remain `biopentra_inbox_*` / `biopentra-support/v1` (compatibility)
-- Documented in monorepo: `biopentra-custom-plugins/docs/fluent-imap-support-desk-production-cutover.md`
+- Internal IDs unchanged: `biopentra_inbox_*` options/tables, `biopentra-support/v1` REST, `manage_biopentra_inbox` — see [compatibility-identifiers.md](compatibility-identifiers.md)
+- Legacy `biopentra-contact-inbox` plugin folder must not be active alongside this plugin
 
 **Deploy fixes:** rsync from this repo → production `fluent-imap-support-desk/`, or release ZIP from `builds/`.
 

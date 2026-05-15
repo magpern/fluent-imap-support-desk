@@ -71,7 +71,7 @@ class Biopentra_Contact_Inbox_Admin_Detail {
 			return;
 		}
 
-		$default_subject = get_option( 'biopentra_inbox_default_reply_subject', 'Re: Your Biopentra inquiry' );
+		$default_subject = fisd_get_default_reply_subject();
 		$action          = admin_url( 'admin-post.php' );
 
 		echo '<h3>' . esc_html__( 'Send reply', 'biopentra-contact-inbox' ) . '</h3>';
@@ -183,7 +183,7 @@ class Biopentra_Contact_Inbox_Admin_Detail {
 			return;
 		}
 
-		$default_subject = get_option( 'biopentra_inbox_default_reply_subject', 'Re: Your Biopentra inquiry' );
+		$default_subject = fisd_get_default_reply_subject();
 		$subj            = isset( $ticket->subject ) && (string) $ticket->subject !== ''
 			? 'Re: ' . (string) $ticket->subject
 			: $default_subject;
@@ -440,7 +440,7 @@ class Biopentra_Contact_Inbox_Admin_Detail {
 			'/\n-----+\s*Original Message\s*-----+\s*\n/i',
 			'/\nRecent conversation\s*\n/i',
 			'/\nOn [^\n]{1,260}wrote:\s*\n/i',
-			// Outlook / Biopentra: From / Sent / To / Subject block.
+			// Outlook-style From / Sent / To / Subject block.
 			'/\nFrom:\s[^\n]+\n\s*Sent:\s[^\n]+\n\s*To:\s[^\n]+\n\s*Subject:\s/im',
 			'/\nFrom:\s[^\n]*[@<][^\n]*\n\s*Sent:\s[^\n]+/im',
 			'/\n_{12,}\s*\n/',

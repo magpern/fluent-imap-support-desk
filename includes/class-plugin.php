@@ -382,7 +382,7 @@ class Biopentra_Contact_Inbox_Plugin {
 				$sid = (int) $ticket->source_ref;
 				if ( $sid > 0 ) {
 					$tn            = isset( $ticket->ticket_number ) && (int) $ticket->ticket_number > 0 ? (int) $ticket->ticket_number : $ticket_id;
-					$base_sub      = $subject !== '' ? $subject : get_option( 'biopentra_inbox_default_reply_subject', 'Re: Your Biopentra inquiry' );
+					$base_sub      = $subject !== '' ? $subject : fisd_get_default_reply_subject();
 					$final_subject = Biopentra_Contact_Inbox_Ticket_Ref::format_subject( $base_sub, $tn );
 					Biopentra_Contact_Inbox_Reply_Repository::insert(
 						array(
@@ -453,7 +453,7 @@ class Biopentra_Contact_Inbox_Plugin {
 		}
 
 		if ( get_option( 'biopentra_inbox_store_reply_history', 'yes' ) === 'yes' ) {
-			$final_subject = $subject !== '' ? $subject : get_option( 'biopentra_inbox_default_reply_subject', 'Re: Your Biopentra inquiry' );
+			$final_subject = $subject !== '' ? $subject : fisd_get_default_reply_subject();
 			Biopentra_Contact_Inbox_Reply_Repository::insert(
 				array(
 					'submission_id'   => $sid,

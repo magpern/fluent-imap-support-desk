@@ -13,7 +13,7 @@ class Biopentra_Contact_Inbox_Activator {
 
 	const DB_VERSION = '2.2.0';
 
-	const DEFAULT_FORM_TITLE = 'Biopentra Contact Form';
+	const DEFAULT_FORM_TITLE = 'Support desk contact form';
 
 	/**
 	 * Run dbDelta for all plugin tables (replies + tickets + messages).
@@ -167,9 +167,10 @@ class Biopentra_Contact_Inbox_Activator {
 		}
 
 		add_option( 'biopentra_inbox_contact_form_id', $form_id );
-		add_option( 'biopentra_inbox_from_name', 'Biopentra' );
+		$from_default = get_bloginfo( 'name', 'display' );
+		add_option( 'biopentra_inbox_from_name', ( is_string( $from_default ) && $from_default !== '' ) ? $from_default : '' );
 		add_option( 'biopentra_inbox_from_email', get_option( 'admin_email' ) );
-		add_option( 'biopentra_inbox_default_reply_subject', 'Re: Your Biopentra inquiry' );
+		add_option( 'biopentra_inbox_default_reply_subject', __( 'Re: Your support inquiry', 'biopentra-contact-inbox' ) );
 		add_option( 'biopentra_inbox_bcc_email', '' );
 		add_option( 'biopentra_inbox_store_reply_history', 'yes' );
 		add_option( 'biopentra_inbox_delete_on_uninstall', 'no' );
@@ -208,7 +209,7 @@ class Biopentra_Contact_Inbox_Activator {
 		add_option( 'biopentra_inbox_reply_logo_source', 'site_logo' );
 		add_option( 'biopentra_inbox_reply_logo_custom_url', '' );
 		add_option( 'biopentra_inbox_reply_header', "Hello {customer_name},\n" );
-		add_option( 'biopentra_inbox_reply_footer', "Best regards,\nBiopentra Support\n\nTicket: {ticket_number}" );
+		add_option( 'biopentra_inbox_reply_footer', "Best regards,\n{site_name} Support\n\nTicket: {ticket_number}" );
 		add_option( 'biopentra_inbox_reply_company_source', 'wc_address' );
 		add_option( 'biopentra_inbox_reply_company_custom', '' );
 		add_option( 'biopentra_inbox_backfill_to_email_last_id', 0 );

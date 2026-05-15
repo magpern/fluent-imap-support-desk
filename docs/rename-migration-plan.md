@@ -1,6 +1,6 @@
 # Rename migration plan — biopentra-contact-inbox → Fluent IMAP Support Desk
 
-**Status:** Planned — **not executed on Biopentra production** (2026-05-15)
+**Status:** Folder cutover **completed** on production (2026-05-15). Internal `biopentra_*` identifiers remain; see [compatibility-identifiers.md](compatibility-identifiers.md).
 
 ---
 
@@ -10,7 +10,7 @@ Move production from:
 
 - Folder: `wp-content/plugins/biopentra-contact-inbox/`
 - Main file: `biopentra-contact-inbox.php`
-- Product label: Biopentra Support Desk
+- Product label (historical): Biopentra Support Desk → **Fluent IMAP Support Desk** (visible UI)
 
 To:
 

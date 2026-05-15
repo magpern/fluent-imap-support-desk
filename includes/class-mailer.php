@@ -56,7 +56,7 @@ class Biopentra_Contact_Inbox_Mailer {
 			return new \WP_Error( 'invalid_email', __( 'Invalid recipient email.', 'biopentra-contact-inbox' ) );
 		}
 
-		$from_name  = sanitize_text_field( get_option( 'biopentra_inbox_from_name', 'Biopentra' ) );
+		$from_name  = fisd_get_from_name();
 		$from_email = sanitize_email( get_option( 'biopentra_inbox_from_email', get_option( 'admin_email' ) ) );
 		if ( ! is_email( $from_email ) ) {
 			$from_email = sanitize_email( get_option( 'admin_email' ) );
@@ -64,7 +64,7 @@ class Biopentra_Contact_Inbox_Mailer {
 
 		$subject = sanitize_text_field( $subject );
 		if ( $subject === '' ) {
-			$subject = get_option( 'biopentra_inbox_default_reply_subject', 'Re: Your Biopentra inquiry' );
+			$subject = fisd_get_default_reply_subject();
 		}
 
 		$tn = isset( $ticket->ticket_number ) && (int) $ticket->ticket_number > 0 ? (int) $ticket->ticket_number : $ticket_id;
@@ -206,7 +206,7 @@ class Biopentra_Contact_Inbox_Mailer {
 			: '';
 
 		if ( 'outbound' === $dir ) {
-			$who = __( 'Biopentra', 'biopentra-contact-inbox' );
+			$who = fisd_get_from_name();
 		} else {
 			$who = __( 'You', 'biopentra-contact-inbox' );
 		}
@@ -336,7 +336,7 @@ class Biopentra_Contact_Inbox_Mailer {
 		if ( ! is_email( $to ) ) {
 			return new \WP_Error( 'invalid_email', __( 'Invalid recipient email.', 'biopentra-contact-inbox' ) );
 		}
-		$from_name  = sanitize_text_field( get_option( 'biopentra_inbox_from_name', 'Biopentra' ) );
+		$from_name  = fisd_get_from_name();
 		$from_email = sanitize_email( get_option( 'biopentra_inbox_from_email', get_option( 'admin_email' ) ) );
 		if ( ! is_email( $from_email ) ) {
 			$from_email = sanitize_email( get_option( 'admin_email' ) );

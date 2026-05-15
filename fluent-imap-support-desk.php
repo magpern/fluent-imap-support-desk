@@ -39,6 +39,51 @@ if ( ! defined( 'FISD_PLUGIN_SLUG' ) ) {
 	define( 'FISD_PLUGIN_SLUG', 'fluent-imap-support-desk' );
 }
 
+/**
+ * Visible default From name when biopentra_inbox_from_name is empty.
+ *
+ * @return string
+ */
+function fisd_fallback_from_name() {
+	$blog = get_bloginfo( 'name', 'display' );
+	return ( is_string( $blog ) && $blog !== '' ) ? $blog : __( 'Support', 'biopentra-contact-inbox' );
+}
+
+/**
+ * Resolved outbound From name (option or site fallback).
+ *
+ * @return string
+ */
+function fisd_get_from_name() {
+	$v = get_option( 'biopentra_inbox_from_name', '' );
+	if ( is_string( $v ) && trim( $v ) !== '' ) {
+		return sanitize_text_field( $v );
+	}
+	return fisd_fallback_from_name();
+}
+
+/**
+ * Visible default reply subject when option is empty.
+ *
+ * @return string
+ */
+function fisd_fallback_reply_subject() {
+	return __( 'Re: Your support inquiry', 'biopentra-contact-inbox' );
+}
+
+/**
+ * Resolved default reply subject (option or fallback).
+ *
+ * @return string
+ */
+function fisd_get_default_reply_subject() {
+	$v = get_option( 'biopentra_inbox_default_reply_subject', '' );
+	if ( is_string( $v ) && trim( $v ) !== '' ) {
+		return sanitize_text_field( $v );
+	}
+	return fisd_fallback_reply_subject();
+}
+
 require_once BIOPENTRA_INBOX_PATH . 'includes/class-activator.php';
 register_activation_hook( __FILE__, array( 'Biopentra_Contact_Inbox_Activator', 'activate' ) );
 register_deactivation_hook( __FILE__, array( 'Biopentra_Contact_Inbox_Activator', 'deactivate' ) );

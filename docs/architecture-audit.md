@@ -2,7 +2,7 @@
 
 **Date:** 2026-05-15  
 **Bootstrap:** `fluent-imap-support-desk.php`  
-**Compatibility lineage:** `biopentra-contact-inbox` (unchanged internals)
+**Compatibility lineage:** `biopentra-contact-inbox` (unchanged internals). See [compatibility-identifiers.md](compatibility-identifiers.md). PHP class names remain `Biopentra_Contact_Inbox_*` until a future major release.
 
 ---
 

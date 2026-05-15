@@ -162,7 +162,7 @@ class Biopentra_Contact_Inbox_Bridge_Diagnostics {
 			);
 		}
 
-		$from_name  = sanitize_text_field( get_option( 'biopentra_inbox_from_name', 'Biopentra' ) );
+		$from_name  = fisd_get_from_name();
 		$from_email = sanitize_email( get_option( 'biopentra_inbox_from_email', get_option( 'admin_email' ) ) );
 		if ( ! is_email( $from_email ) ) {
 			$from_email = sanitize_email( get_option( 'admin_email' ) );
@@ -171,13 +171,13 @@ class Biopentra_Contact_Inbox_Bridge_Diagnostics {
 		$ts       = gmdate( 'c' );
 		$subject  = sprintf(
 			/* translators: %s: UTC ISO8601 timestamp */
-			__( '[Biopentra Support Desk] SMTP test %s', 'biopentra-contact-inbox' ),
+			__( '[Fluent IMAP Support Desk] SMTP test %s', 'biopentra-contact-inbox' ),
 			$ts
 		);
 		$site     = home_url();
 		$phpv     = PHP_VERSION;
 		$wpv      = get_bloginfo( 'version' );
-		$body     = '<p>' . esc_html__( 'This is an automated SMTP connectivity test from Biopentra Support Desk.', 'biopentra-contact-inbox' ) . '</p>';
+		$body     = '<p>' . esc_html__( 'This is an automated SMTP connectivity test from Fluent IMAP Support Desk.', 'biopentra-contact-inbox' ) . '</p>';
 		$body    .= '<ul>';
 		$body    .= '<li><strong>' . esc_html__( 'Time (UTC)', 'biopentra-contact-inbox' ) . ':</strong> ' . esc_html( $ts ) . '</li>';
 		$body    .= '<li><strong>' . esc_html__( 'Site', 'biopentra-contact-inbox' ) . ':</strong> ' . esc_html( $site ) . '</li>';

@@ -1,6 +1,6 @@
 <?php
 /**
- * Biopentra Support Desk — tabbed settings.
+ * Fluent IMAP Support Desk — tabbed settings.
  *
  * @package Biopentra_Contact_Inbox
  */
@@ -22,7 +22,7 @@ class Biopentra_Contact_Inbox_Settings {
 		$opts = array(
 			'biopentra_inbox_display_name'           => array( 'type' => 'string', 'cb' => 'sanitize_text_field', 'def' => '' ),
 			'biopentra_inbox_contact_form_id'        => array( 'type' => 'integer', 'cb' => array( __CLASS__, 'sanitize_form_id' ), 'def' => 0 ),
-			'biopentra_inbox_from_name'              => array( 'type' => 'string', 'cb' => 'sanitize_text_field', 'def' => 'Biopentra' ),
+			'biopentra_inbox_from_name'              => array( 'type' => 'string', 'cb' => 'sanitize_text_field', 'def' => '' ),
 			'biopentra_inbox_from_email'             => array( 'type' => 'string', 'cb' => array( __CLASS__, 'sanitize_from_email' ), 'def' => '' ),
 			'biopentra_inbox_default_reply_subject'  => array( 'type' => 'string', 'cb' => 'sanitize_text_field', 'def' => '' ),
 			'biopentra_inbox_bcc_email'              => array( 'type' => 'string', 'cb' => array( __CLASS__, 'sanitize_bcc' ), 'def' => '' ),
@@ -51,7 +51,7 @@ class Biopentra_Contact_Inbox_Settings {
 			'biopentra_inbox_reply_logo_source'        => array( 'type' => 'string', 'cb' => array( 'Biopentra_Contact_Inbox_Email_Reply_Template', 'sanitize_logo_source' ), 'def' => 'site_logo' ),
 			'biopentra_inbox_reply_logo_custom_url'    => array( 'type' => 'string', 'cb' => array( 'Biopentra_Contact_Inbox_Email_Reply_Template', 'sanitize_logo_url' ), 'def' => '' ),
 			'biopentra_inbox_reply_header'             => array( 'type' => 'string', 'cb' => array( 'Biopentra_Contact_Inbox_Email_Reply_Template', 'sanitize_fragment_html' ), 'def' => "Hello {customer_name},\n" ),
-			'biopentra_inbox_reply_footer'             => array( 'type' => 'string', 'cb' => array( 'Biopentra_Contact_Inbox_Email_Reply_Template', 'sanitize_fragment_html' ), 'def' => "Best regards,\nBiopentra Support\n\nTicket: {ticket_number}" ),
+			'biopentra_inbox_reply_footer'             => array( 'type' => 'string', 'cb' => array( 'Biopentra_Contact_Inbox_Email_Reply_Template', 'sanitize_fragment_html' ), 'def' => "Best regards,\n{site_name} Support\n\nTicket: {ticket_number}" ),
 			'biopentra_inbox_reply_company_source'     => array( 'type' => 'string', 'cb' => array( 'Biopentra_Contact_Inbox_Email_Reply_Template', 'sanitize_company_source' ), 'def' => 'wc_address' ),
 			'biopentra_inbox_reply_company_custom'     => array( 'type' => 'string', 'cb' => array( 'Biopentra_Contact_Inbox_Email_Reply_Template', 'sanitize_fragment_html' ), 'def' => '' ),
 		);
@@ -372,8 +372,8 @@ class Biopentra_Contact_Inbox_Settings {
 		echo '<p class="description">' . esc_html__( 'Which Fluent Forms form creates tickets when migrated or submitted.', 'biopentra-contact-inbox' ) . '</p>';
 		echo '</td></tr>';
 
-		self::text_row( 'biopentra_inbox_default_reply_subject', __( 'Default reply subject', 'biopentra-contact-inbox' ), get_option( 'biopentra_inbox_default_reply_subject', 'Re: Your Biopentra inquiry' ), 'large-text' );
-		self::text_row( 'biopentra_inbox_from_name', __( 'From name', 'biopentra-contact-inbox' ), get_option( 'biopentra_inbox_from_name', 'Biopentra' ), 'regular-text' );
+		self::text_row( 'biopentra_inbox_default_reply_subject', __( 'Default reply subject', 'biopentra-contact-inbox' ), fisd_get_default_reply_subject(), 'large-text' );
+		self::text_row( 'biopentra_inbox_from_name', __( 'From name', 'biopentra-contact-inbox' ), fisd_get_from_name(), 'regular-text' );
 		self::text_row( 'biopentra_inbox_from_email', __( 'From email', 'biopentra-contact-inbox' ), get_option( 'biopentra_inbox_from_email', get_option( 'admin_email' ) ), 'regular-text', 'email' );
 		self::text_row( 'biopentra_inbox_bcc_email', __( 'Optional BCC', 'biopentra-contact-inbox' ), get_option( 'biopentra_inbox_bcc_email', '' ), 'regular-text', 'email' );
 

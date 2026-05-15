@@ -41,7 +41,7 @@ class Biopentra_Contact_Inbox_Email_Reply_Template {
 	 * @return string
 	 */
 	public static function default_footer() {
-		return "Best regards,\nBiopentra Support\n\nTicket: {ticket_number}";
+		return "Best regards,\n{site_name} Support\n\nTicket: {ticket_number}";
 	}
 
 	/**

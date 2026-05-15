@@ -92,7 +92,7 @@ class Biopentra_Contact_Inbox_Bridge_Smtp {
 		if ( ! self::$plugin_only_active ) {
 			return $name;
 		}
-		return sanitize_text_field( get_option( 'biopentra_inbox_from_name', 'Biopentra' ) );
+		return fisd_get_from_name();
 	}
 
 	/**
@@ -153,7 +153,7 @@ class Biopentra_Contact_Inbox_Bridge_Smtp {
 
 		if ( self::$plugin_only_active ) {
 			$from_email = sanitize_email( get_option( 'biopentra_inbox_from_email', get_option( 'admin_email' ) ) );
-			$from_name  = sanitize_text_field( get_option( 'biopentra_inbox_from_name', 'Biopentra' ) );
+			$from_name  = fisd_get_from_name();
 			if ( is_email( $from_email ) ) {
 				try {
 					$phpmailer->setFrom( $from_email, $from_name, false );
@@ -186,7 +186,7 @@ class Biopentra_Contact_Inbox_Bridge_Smtp {
 		$sender = isset( $phpmailer->Sender ) ? (string) $phpmailer->Sender : '';
 		Biopentra_Contact_Inbox_Bridge_Diagnostics::log_line(
 			sprintf(
-				'Biopentra Bridge SMTP applied: scope=%s plugin_mail=%s smtp_host=%s smtp_port=%d phpmailer_from=%s phpmailer_sender=%s',
+				'Support desk Bridge SMTP applied: scope=%s plugin_mail=%s smtp_host=%s smtp_port=%d phpmailer_from=%s phpmailer_sender=%s',
 				$scope,
 				self::$plugin_only_active ? 'yes' : 'no',
 				$host,

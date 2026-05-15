@@ -1,5 +1,17 @@
 # Changelog
 
+## [Unreleased]
+
+### Changed
+
+- Remove visible Biopentra branding from admin labels, settings defaults, email template fallbacks, and documentation.
+- Generic defaults: site name for From name, “Re: Your support inquiry”, reply footer uses `{site_name}` placeholder.
+- Add [docs/compatibility-identifiers.md](docs/compatibility-identifiers.md) listing internal `biopentra_*` identifiers.
+
+### Notes
+
+- Preserve internal compatibility identifiers (options, tables, REST, capability, menu slug, class names).
+
 ## [2.0.0] - 2026-05-15
 
 ### Added
@@ -13,4 +25,4 @@
 ### Notes
 
 - No behavior change vs `biopentra-custom-plugins/plugins/biopentra-contact-inbox/` at v2.0.0.
-- Production Biopentra site remains on `biopentra-contact-inbox` slug until migration release.
+- Production folder cutover to `fluent-imap-support-desk` completed 2026-05-15 (internal IDs unchanged).

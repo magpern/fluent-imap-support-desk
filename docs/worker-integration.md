@@ -1,10 +1,10 @@
 # Worker integration (Proton Bridge + mail worker)
 
-> Copied from biopentra-contact-inbox lineage. REST namespace remains `biopentra-support/v1`. Compose reference: Biopentra `woocommerce/docker-compose.yml`.
+> REST namespace remains `biopentra-support/v1` (compatibility). Compose examples may reference a host `woocommerce/docker-compose.yml` stack.
 
-# Proton Mail Bridge and Docker (Biopentra Support Desk)
+# Proton Mail Bridge and Docker (Fluent IMAP Support Desk)
 
-This document describes how to run **Proton Mail Bridge** in Docker alongside the **WordPress** service from this project’s `docker-compose.yml`, so the **Biopentra Support Desk** plugin can reach Bridge over an **internal Docker network** without publishing IMAP or SMTP ports to the public internet.
+This document describes how to run **Proton Mail Bridge** in Docker alongside **WordPress**, so **Fluent IMAP Support Desk** can reach Bridge over an **internal Docker network** without publishing IMAP or SMTP ports to the public internet.
 
 ## Overview
 

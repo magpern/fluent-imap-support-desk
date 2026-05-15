@@ -62,7 +62,7 @@ class Biopentra_Contact_Inbox_Cron {
 		$schedules[ $key ] = array(
 			'interval' => $interval,
 			/* translators: %d: seconds */
-			'display'  => sprintf( __( 'Biopentra Support Desk every %d seconds', 'biopentra-contact-inbox' ), $interval ),
+			'display'  => sprintf( __( 'Fluent IMAP Support Desk every %d seconds', 'biopentra-contact-inbox' ), $interval ),
 		);
 		return $schedules;
 	}

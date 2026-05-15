@@ -1,6 +1,6 @@
 <?php
 /**
- * Uninstall Biopentra Support Desk (optional full cleanup).
+ * Uninstall Fluent IMAP Support Desk (optional full cleanup).
  *
  * When "Delete plugin data on uninstall" is disabled in Settings, this file exits
  * without removing tables, options, cron, or transients.
