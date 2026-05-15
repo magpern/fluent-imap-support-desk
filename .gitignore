@@ -1,0 +1,14 @@
+/builds/*.zip
+/builds/zips/
+/node_modules/
+/vendor/
+.env
+.env.*
+!.env.example
+*.log
+*.sql
+*.sql.gz
+*.dump
+.DS_Store
+.idea/
+.vscode/

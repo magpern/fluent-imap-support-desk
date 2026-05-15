@@ -1,0 +1,103 @@
+/* Support Desk ticket list: Action badges + subtle “needs reply” row */
+
+.biopentra-inbox-action-badge {
+	display: inline-block;
+	padding: 2px 8px;
+	border-radius: 3px;
+	font-size: 12px;
+	line-height: 1.4;
+	font-weight: 500;
+}
+
+.biopentra-inbox-action-badge.closed {
+	color: #50575e;
+	background: #f0f0f1;
+	border: 1px solid #dcdcde;
+}
+
+.biopentra-inbox-action-badge.replied {
+	color: #1e4620;
+	background: #edfaef;
+	border: 1px solid #c3e6c9;
+}
+
+.biopentra-inbox-action-badge.needs-reply {
+	color: #50575e;
+	background: #fcf9e8;
+	border: 1px solid #e8e3c8;
+}
+
+.wp-list-table.tickets tr.biopentra-inbox-needs-reply-row td {
+	background-color: #faf8f3;
+	box-shadow: inset 3px 0 0 0 #c9b77a;
+}
+
+.wp-list-table.tickets tr.biopentra-inbox-needs-reply-row:nth-child(odd) td {
+	background-color: #f7f4ec;
+}
+
+/* Ticket thread (detail): inbound vs outbound */
+
+.biopentra-inbox-thread-msg {
+	border: 1px solid #dcdcde;
+	padding: 12px 14px;
+	margin-bottom: 12px;
+	background: #fff;
+	border-radius: 2px;
+}
+
+.biopentra-inbox-thread-msg--inbound {
+	border-left: 4px solid #2271b1;
+	background: #f0f6fc;
+}
+
+.biopentra-inbox-thread-msg--outbound {
+	border-left: 4px solid #00a32a;
+	background: #edfaef;
+}
+
+/* Inbound email: quoted thread (collapsed by default) */
+
+.biopentra-inbox-quoted-history {
+	margin-top: 10px;
+	padding: 8px 10px;
+	background: #f6f7f7;
+	border: 1px solid #dcdcde;
+	border-radius: 2px;
+	font-size: 12px;
+	line-height: 1.45;
+	color: #50575e;
+}
+
+.biopentra-inbox-quoted-history > summary {
+	cursor: pointer;
+	font-weight: 600;
+	color: #1d2327;
+	list-style: none;
+}
+
+.biopentra-inbox-quoted-history > summary::-webkit-details-marker {
+	display: none;
+}
+
+.biopentra-inbox-quoted-history > summary::before {
+	content: "▸ ";
+	font-size: 10px;
+	opacity: 0.7;
+}
+
+.biopentra-inbox-quoted-history[open] > summary::before {
+	content: "▾ ";
+}
+
+.biopentra-inbox-quoted-history__body {
+	margin-top: 8px;
+	padding-top: 8px;
+	border-top: 1px solid #dcdcde;
+	white-space: pre-wrap;
+	word-break: break-word;
+}
+
+.biopentra-inbox-email-new {
+	margin-bottom: 0;
+}
