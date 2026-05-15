@@ -58,9 +58,9 @@ class Biopentra_Contact_Inbox_Plugin {
 	}
 
 	public function register_menu() {
-		$title = get_option( 'biopentra_inbox_display_name', __( 'Biopentra Support Desk', 'biopentra-contact-inbox' ) );
+		$title = get_option( 'biopentra_inbox_display_name', __( 'Fluent IMAP Support Desk', 'biopentra-contact-inbox' ) );
 		if ( ! is_string( $title ) || $title === '' ) {
-			$title = __( 'Biopentra Support Desk', 'biopentra-contact-inbox' );
+			$title = __( 'Fluent IMAP Support Desk', 'biopentra-contact-inbox' );
 		}
 
 		add_menu_page(

@@ -173,7 +173,7 @@ class Biopentra_Contact_Inbox_Activator {
 		add_option( 'biopentra_inbox_bcc_email', '' );
 		add_option( 'biopentra_inbox_store_reply_history', 'yes' );
 		add_option( 'biopentra_inbox_delete_on_uninstall', 'no' );
-		add_option( 'biopentra_inbox_display_name', __( 'Biopentra Support Desk', 'biopentra-contact-inbox' ) );
+		add_option( 'biopentra_inbox_display_name', __( 'Fluent IMAP Support Desk', 'biopentra-contact-inbox' ) );
 
 		add_option( 'biopentra_inbox_email_enabled', 'no' );
 		add_option( 'biopentra_inbox_imap_host', 'proton-bridge' );

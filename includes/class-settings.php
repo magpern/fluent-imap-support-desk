@@ -316,7 +316,7 @@ class Biopentra_Contact_Inbox_Settings {
 
 		self::render_bridge_test_notices( $tab );
 
-		echo '<h1>' . esc_html__( 'Biopentra Support Desk — Settings', 'biopentra-contact-inbox' ) . '</h1>';
+		echo '<h1>' . esc_html__( 'Fluent IMAP Support Desk — Settings', 'biopentra-contact-inbox' ) . '</h1>';
 
 		echo '<h2 class="nav-tab-wrapper">';
 		foreach (
@@ -349,7 +349,7 @@ class Biopentra_Contact_Inbox_Settings {
 		settings_fields( self::OPTION_GROUP );
 		echo '<input type="hidden" name="bsd_settings_tab" value="' . esc_attr( $tab ) . '" />';
 
-		$disp = get_option( 'biopentra_inbox_display_name', __( 'Biopentra Support Desk', 'biopentra-contact-inbox' ) );
+		$disp = get_option( 'biopentra_inbox_display_name', __( 'Fluent IMAP Support Desk', 'biopentra-contact-inbox' ) );
 
 		// General tab panel (always in DOM).
 		$show_gen = ( 'general' === $tab ) ? 'block' : 'none';
