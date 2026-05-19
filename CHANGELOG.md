@@ -2,11 +2,11 @@
 
 ## [Unreleased]
 
-_No pending changes beyond the current development line._
+_No pending changes._
 
-## [2.0.3-dev] - 2026-05-19
+## [2.0.3] - 2026-05-19
 
-**Development line** — not tagged for stable release. Includes GitHub Release updater for production ZIP deployments.
+**GitHub Release updater** — production installs and updates from GitHub Release ZIP assets.
 
 ### Added
 
@@ -16,7 +16,7 @@ _No pending changes beyond the current development line._
 
 ### Notes
 
-- Last **stable** GitHub release remains **v2.0.2**. Do not deploy this dev build to production unless intentionally testing.
+- No intentional support-desk behavior changes vs **2.0.2**. Development servers should keep using repo/rsync and disable the updater via `FISD_DISABLE_GITHUB_UPDATER`.
 
 ## [2.0.2] - 2026-05-19
 
