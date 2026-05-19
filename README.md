@@ -34,9 +34,28 @@ bash scripts/release-audit.sh
 # → builds/fluent-imap-support-desk-{version}.zip
 ```
 
-Upload via **Plugins → Add New → Upload**. Pushing a `v*` tag runs [.github/workflows/release.yml](.github/workflows/release.yml) to attach the ZIP to a GitHub Release.
+Upload via **Plugins → Add New → Upload**, or use the built-in updater on **production** (see below). Pushing a `v*` tag runs [.github/workflows/release.yml](.github/workflows/release.yml) to attach the ZIP to a GitHub Release.
 
-For development sync to a bind-mounted site, rsync from this repository — do not edit `wp-content/plugins/fluent-imap-support-desk/` as the source of truth.
+For development sync to a bind-mounted site, rsync from this repository — do not edit `wp-content/plugins/fluent-imap-support-desk/` as the source of truth. The dev server does **not** need to match the latest stable ZIP.
+
+### GitHub Release updater (production)
+
+On sites with `WP_ENVIRONMENT_TYPE` set to `production`, the plugin checks:
+
+`https://api.github.com/repos/magpern/fluent-imap-support-desk/releases/latest`
+
+and offers updates only when a newer **stable** release exists and the release asset `fluent-imap-support-desk-X.Y.Z.zip` is present (not GitHub’s source ZIP).
+
+**Disable on development** (recommended for this repo checkout):
+
+```php
+// wp-config.php
+define( 'FISD_DISABLE_GITHUB_UPDATER', true );
+```
+
+Or filter: `add_filter( 'fisd_github_updater_enabled', '__return_false' );`
+
+Installs with `-dev`, `-snapshot`, `-alpha`, `-beta`, or `-rc` in the version string are not prompted to “update” to an older stable release unless the stable version is greater than the install base (e.g. `2.0.3-dev` is not nagged by `2.0.2`).
 
 ## Development
 

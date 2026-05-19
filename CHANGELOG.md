@@ -1,5 +1,23 @@
 # Changelog
 
+## [Unreleased]
+
+_No pending changes beyond the current development line._
+
+## [2.0.3-dev] - 2026-05-19
+
+**Development line** — not tagged for stable release. Includes GitHub Release updater for production ZIP deployments.
+
+### Added
+
+- `includes/class-github-updater.php` — WordPress updates from [GitHub Releases](https://github.com/magpern/fluent-imap-support-desk/releases/latest) using asset `fluent-imap-support-desk-X.Y.Z.zip` (not source archives).
+- Environment guard: updater enabled on `WP_ENVIRONMENT_TYPE=production` by default; disable on dev with `FISD_DISABLE_GITHUB_UPDATER` or filter `fisd_github_updater_enabled`.
+- Prerelease install handling: sites on `-dev`, `-snapshot`, `-alpha`, `-beta`, or `-rc` versions only see an update when the latest **stable** release is newer than the install base version (avoids downgrade noise).
+
+### Notes
+
+- Last **stable** GitHub release remains **v2.0.2**. Do not deploy this dev build to production unless intentionally testing.
+
 ## [2.0.2] - 2026-05-19
 
 **Packaging and release automation** — aligns version numbers with code already on `main`. **No intentional support-desk behavior changes** beyond what landed between `v2.0.0` and today (branding copy).
@@ -21,10 +39,6 @@
 
 - Git tag **`v2.0.1`** (2026-05-15) pointed at branding/menu-label commits but left the plugin header at **2.0.0**. That tag is historical; **do not use it for deployments**. Use **`v2.0.2`** instead.
 - Internal compatibility identifiers (`biopentra_*` options, tables, REST, capability) remain unchanged.
-
-## [Unreleased]
-
-_No pending changes._
 
 ## [2.0.0] - 2026-05-15
 

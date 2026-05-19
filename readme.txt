@@ -16,6 +16,8 @@ Fluent IMAP Support Desk turns Fluent Forms submissions into threaded support ti
 
 Internal compatibility identifiers (`biopentra_*` options, tables, REST namespace, capabilities) are unchanged from the `biopentra-contact-inbox` lineage.
 
+Development checkouts may use a `2.0.3-dev` header version; the stable tag above reflects the latest GitHub Release.
+
 == Installation ==
 
 1. Upload the plugin ZIP via **Plugins → Add New → Upload**, or extract to `wp-content/plugins/fluent-imap-support-desk/`.
@@ -23,6 +25,9 @@ Internal compatibility identifiers (`biopentra_*` options, tables, REST namespac
 3. Configure IMAP/SMTP and Fluent Forms mapping under **Support Desk** in wp-admin.
 
 == Changelog ==
+
+= 2.0.3-dev =
+* GitHub Release updater for production ZIP installs (see README). Development-only version string.
 
 = 2.0.2 =
 * Production release ZIP hardening and GitHub Actions CI/release automation.

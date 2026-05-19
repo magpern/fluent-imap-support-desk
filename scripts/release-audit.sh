@@ -49,22 +49,30 @@ done
 [[ -d "${REPO_ROOT}/docs" ]] || fail "Missing docs/ (dev tree)"
 [[ -f "${REPO_ROOT}/.github/workflows/ci.yml" ]] || fail "Missing .github/workflows/ci.yml"
 [[ -f "${REPO_ROOT}/.github/workflows/release.yml" ]] || fail "Missing .github/workflows/release.yml"
-[[ -f "${REPO_ROOT}/docs/GITHUB_RELEASE_NOTES_${VERSION_CONST}.md" ]] || fail "Missing docs/GITHUB_RELEASE_NOTES_${VERSION_CONST}.md"
+if [[ "${VERSION_CONST}" =~ -(dev|snapshot|alpha|beta|rc) ]]; then
+	echo "    Dev version (${VERSION_CONST}): skipping stable release-notes file requirement"
+else
+	[[ -f "${REPO_ROOT}/docs/GITHUB_RELEASE_NOTES_${VERSION_CONST}.md" ]] || fail "Missing docs/GITHUB_RELEASE_NOTES_${VERSION_CONST}.md"
+fi
 
 echo "    Dev tree: scripts/, docs/, .github/ present (expected in repo)"
 
 echo "==> PHP syntax lint (repository)"
-LINT_FAIL=0
-while IFS= read -r -d '' php_file; do
-	if ! php -l "${php_file}" >/dev/null 2>&1; then
-		echo "    FAIL: ${php_file}" >&2
-		LINT_FAIL=1
+if ! command -v php >/dev/null 2>&1; then
+	warn "php not in PATH; skipping local syntax lint (CI runs php -l)"
+else
+	LINT_FAIL=0
+	while IFS= read -r -d '' php_file; do
+		if ! php -l "${php_file}" >/dev/null 2>&1; then
+			echo "    FAIL: ${php_file}" >&2
+			LINT_FAIL=1
+		fi
+	done < <(find "${REPO_ROOT}/includes" "${REPO_ROOT}" -maxdepth 1 -name '*.php' -print0)
+	if [[ "${LINT_FAIL}" -ne 0 ]]; then
+		fail "PHP syntax lint failed"
 	fi
-done < <(find "${REPO_ROOT}/includes" "${REPO_ROOT}" -maxdepth 1 -name '*.php' -print0)
-if [[ "${LINT_FAIL}" -ne 0 ]]; then
-	fail "PHP syntax lint failed"
+	echo "    PHP lint: OK"
 fi
-echo "    PHP lint: OK"
 
 echo "    Repository checks passed"
 
