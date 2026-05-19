@@ -1,16 +1,30 @@
 # Changelog
 
-## [Unreleased]
+## [2.0.2] - 2026-05-19
+
+**Packaging and release automation** — aligns version numbers with code already on `main`. **No intentional support-desk behavior changes** beyond what landed between `v2.0.0` and today (branding copy).
+
+### Added
+
+- `readme.txt`, `LICENSE` for distribution.
+- `scripts/lib/verify-release-zip.py` — production ZIP verification.
+- `scripts/release-audit.sh` — repository vs artifact checks.
+- `.github/workflows/ci.yml` and `.github/workflows/release.yml` — PHP lint, build ZIP, GitHub Release on `v*` tags.
+- `docs/GITHUB_RELEASE_NOTES_2.0.2.md`.
 
 ### Changed
 
-- Remove visible Biopentra branding from admin labels, settings defaults, email template fallbacks, and documentation.
-- Generic defaults: site name for From name, “Re: Your support inquiry”, reply footer uses `{site_name}` placeholder.
-- Add [docs/compatibility-identifiers.md](docs/compatibility-identifiers.md) listing internal `biopentra_*` identifiers.
+- **Production release ZIP** — `scripts/build-zip.sh` uses explicit excludes; ships `includes/`, `assets/`, main plugin file, `uninstall.php`, `readme.txt`, `LICENSE` only.
+- **Version** — header and `BIOPENTRA_INBOX_VERSION` set to **2.0.2**.
 
 ### Notes
 
-- Preserve internal compatibility identifiers (options, tables, REST, capability, menu slug, class names).
+- Git tag **`v2.0.1`** (2026-05-15) pointed at branding/menu-label commits but left the plugin header at **2.0.0**. That tag is historical; **do not use it for deployments**. Use **`v2.0.2`** instead.
+- Internal compatibility identifiers (`biopentra_*` options, tables, REST, capability) remain unchanged.
+
+## [Unreleased]
+
+_No pending changes._
 
 ## [2.0.0] - 2026-05-15
 

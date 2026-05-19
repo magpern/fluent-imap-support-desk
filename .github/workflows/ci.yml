@@ -1,0 +1,54 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  lint-and-build:
+    name: PHP ${{ matrix.php-version }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php-version:
+          - '7.4'
+          - '8.1'
+          - '8.2'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          coverage: none
+
+      - name: PHP syntax lint
+        run: |
+          set -euo pipefail
+          find includes . -maxdepth 1 -name '*.php' -print0 | while IFS= read -r -d '' f; do
+            php -l "$f"
+          done
+
+      - name: Build release zip
+        run: bash scripts/build-zip.sh
+
+      - name: Release audit
+        run: bash scripts/release-audit.sh
+
+      - name: Verify release zip exists
+        run: |
+          VERSION="$(grep -E "define\s*\(\s*'BIOPENTRA_INBOX_VERSION'" fluent-imap-support-desk.php | head -n 1 | sed -E "s/.*'([^']+)'.*/\1/")"
+          ZIP_PATH="${GITHUB_WORKSPACE}/builds/fluent-imap-support-desk-${VERSION}.zip"
+          if [[ ! -f "${ZIP_PATH}" ]]; then
+            echo "ERROR: Expected zip not found: ${ZIP_PATH}" >&2
+            exit 1
+          fi
+          echo "OK: ${ZIP_PATH}"

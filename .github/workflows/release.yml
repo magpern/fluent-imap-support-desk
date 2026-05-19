@@ -1,0 +1,94 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Build and publish release ZIP
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          coverage: none
+
+      - name: PHP syntax lint
+        run: |
+          set -euo pipefail
+          find includes . -maxdepth 1 -name '*.php' -print0 | while IFS= read -r -d '' f; do
+            php -l "$f"
+          done
+
+      - name: Build release zip
+        run: bash scripts/build-zip.sh
+
+      - name: Release audit
+        run: bash scripts/release-audit.sh
+
+      - name: Verify release zip exists
+        run: |
+          VERSION="$(grep -E "define\s*\(\s*'BIOPENTRA_INBOX_VERSION'" fluent-imap-support-desk.php | head -n 1 | sed -E "s/.*'([^']+)'.*/\1/")"
+          ZIP_PATH="${GITHUB_WORKSPACE}/builds/fluent-imap-support-desk-${VERSION}.zip"
+          if [[ ! -f "${ZIP_PATH}" ]]; then
+            echo "ERROR: Expected zip not found: ${ZIP_PATH}" >&2
+            exit 1
+          fi
+          echo "ZIP_PATH=${ZIP_PATH}" >> "${GITHUB_ENV}"
+          echo "VERSION=${VERSION}" >> "${GITHUB_ENV}"
+          echo "OK: ${ZIP_PATH}"
+
+      - name: Upload release ZIP artifact
+        uses: actions/upload-artifact@v5
+        with:
+          name: fluent-imap-support-desk-${{ env.VERSION }}
+          path: ${{ env.ZIP_PATH }}
+          if-no-files-found: error
+
+      - name: Determine prerelease flag
+        id: release_meta
+        run: |
+          TAG="${GITHUB_REF_NAME}"
+          VERSION="${TAG#v}"
+          PRERELEASE=false
+          case "${VERSION}" in
+            *beta*|*pilot*|*rc*|*alpha*)
+              PRERELEASE=true
+              ;;
+          esac
+          echo "tag=${TAG}" >> "${GITHUB_OUTPUT}"
+          echo "version=${VERSION}" >> "${GITHUB_OUTPUT}"
+          echo "prerelease=${PRERELEASE}" >> "${GITHUB_OUTPUT}"
+
+      - name: Resolve release notes body
+        id: release_notes
+        run: |
+          VERSION="${{ steps.release_meta.outputs.version }}"
+          NOTES="docs/GITHUB_RELEASE_NOTES_${VERSION}.md"
+          if [[ ! -f "${NOTES}" ]]; then
+            echo "ERROR: No release notes file: ${NOTES}" >&2
+            exit 1
+          fi
+          echo "path=${NOTES}" >> "${GITHUB_OUTPUT}"
+
+      - name: Create or update GitHub Release
+        uses: softprops/action-gh-release@v3
+        with:
+          tag_name: ${{ steps.release_meta.outputs.tag }}
+          name: Fluent IMAP Support Desk ${{ steps.release_meta.outputs.version }}
+          prerelease: ${{ steps.release_meta.outputs.prerelease }}
+          generate_release_notes: false
+          body_path: ${{ steps.release_notes.outputs.path }}
+          files: ${{ env.ZIP_PATH }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

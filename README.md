@@ -26,14 +26,17 @@ WordPress plugin that turns **Fluent Forms** submissions into threaded **support
 
 Optional: Docker Compose stack with `proton-bridge` and a mail worker image — see [docs/worker-integration.md](docs/worker-integration.md).
 
-## Private deployment (ZIP)
+## Production release (ZIP)
 
 ```bash
-./scripts/build-zip.sh
-# → builds/fluent-imap-support-desk-2.0.0.zip
+bash scripts/build-zip.sh
+bash scripts/release-audit.sh
+# → builds/fluent-imap-support-desk-{version}.zip
 ```
 
-Upload via **Plugins → Add New → Upload**, or rsync `fluent-imap-support-desk/` into `wp-content/plugins/`.
+Upload via **Plugins → Add New → Upload**. Pushing a `v*` tag runs [.github/workflows/release.yml](.github/workflows/release.yml) to attach the ZIP to a GitHub Release.
+
+For development sync to a bind-mounted site, rsync from this repository — do not edit `wp-content/plugins/fluent-imap-support-desk/` as the source of truth.
 
 ## Development
 
