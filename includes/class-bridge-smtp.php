@@ -151,7 +151,7 @@ class Biopentra_Contact_Inbox_Bridge_Smtp {
 			),
 		);
 
-		if ( self::$plugin_only_active ) {
+		if ( self::$plugin_only_active || 'all_wp_mail' === $scope ) {
 			$from_email = sanitize_email( get_option( 'biopentra_inbox_from_email', get_option( 'admin_email' ) ) );
 			$from_name  = fisd_get_from_name();
 			if ( is_email( $from_email ) ) {

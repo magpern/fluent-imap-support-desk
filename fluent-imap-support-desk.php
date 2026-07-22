@@ -89,9 +89,44 @@ register_activation_hook( __FILE__, array( 'Biopentra_Contact_Inbox_Activator', 
 register_deactivation_hook( __FILE__, array( 'Biopentra_Contact_Inbox_Activator', 'deactivate' ) );
 
 /**
- * Load plugin runtime (admin, WP-CLI, or WP-Cron).
+ * True when Bridge SMTP is configured to hijack all wp_mail() (WooCommerce, Elementor, etc.).
+ *
+ * @return bool
+ */
+function biopentra_inbox_smtp_applies_globally() {
+	return get_option( 'biopentra_inbox_email_enabled', 'no' ) === 'yes'
+		&& get_option( 'biopentra_inbox_smtp_scope', 'plugin_only' ) === 'all_wp_mail';
+}
+
+/**
+ * Register Bridge SMTP for global wp_mail when scope is all_wp_mail (checkout, REST previews, etc.).
+ */
+function biopentra_inbox_bridge_smtp_init_once() {
+	static $smtp_initialized = false;
+	if ( $smtp_initialized ) {
+		return;
+	}
+	require_once BIOPENTRA_INBOX_PATH . 'includes/class-bridge-smtp.php';
+	Biopentra_Contact_Inbox_Bridge_Smtp::init();
+	$smtp_initialized = true;
+}
+
+/**
+ * Register Bridge SMTP for global wp_mail when scope is all_wp_mail (checkout, REST previews, etc.).
+ */
+function biopentra_inbox_maybe_init_smtp() {
+	if ( biopentra_inbox_smtp_applies_globally() ) {
+		biopentra_inbox_bridge_smtp_init_once();
+	}
+}
+
+/**
+ * Load plugin runtime (admin, WP-CLI, WP-Cron, or global SMTP scope).
  */
 function biopentra_inbox_should_load_runtime() {
+	if ( biopentra_inbox_smtp_applies_globally() ) {
+		return true;
+	}
 	if ( is_admin() ) {
 		return true;
 	}
@@ -105,6 +140,7 @@ function biopentra_inbox_should_load_runtime() {
 }
 
 function biopentra_inbox_init() {
+	biopentra_inbox_maybe_init_smtp();
 	if ( ! biopentra_inbox_should_load_runtime() ) {
 		return;
 	}
@@ -118,7 +154,7 @@ function biopentra_inbox_init() {
 	require_once BIOPENTRA_INBOX_PATH . 'includes/class-ticket-repository.php';
 	require_once BIOPENTRA_INBOX_PATH . 'includes/class-message-repository.php';
 	require_once BIOPENTRA_INBOX_PATH . 'includes/class-inbound-import.php';
-	require_once BIOPENTRA_INBOX_PATH . 'includes/class-bridge-smtp.php';
+	biopentra_inbox_bridge_smtp_init_once();
 	require_once BIOPENTRA_INBOX_PATH . 'includes/class-ticket-backfill.php';
 	require_once BIOPENTRA_INBOX_PATH . 'includes/class-archived-email-cleanup.php';
 	require_once BIOPENTRA_INBOX_PATH . 'includes/class-inbox-cron.php';
@@ -140,7 +176,6 @@ function biopentra_inbox_init() {
 	Biopentra_Contact_Inbox_Activator::maybe_upgrade();
 	Biopentra_Contact_Inbox_Ticket_Backfill::maybe_run_to_email_chunk();
 
-	Biopentra_Contact_Inbox_Bridge_Smtp::init();
 	Biopentra_Contact_Inbox_Cron::init();
 	add_action( 'plugins_loaded', array( 'Biopentra_Contact_Inbox_Fluent_Ticket_Bridge', 'init' ), 100 );
 	Biopentra_Contact_Inbox_Plugin::instance()->init();
