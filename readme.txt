@@ -4,7 +4,7 @@ Tags: support, fluent forms, imap, smtp, helpdesk, tickets
 Requires at least: 6.0
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 2.0.3
+Stable tag: 2.0.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -25,6 +25,11 @@ Production sites on `WP_ENVIRONMENT_TYPE=production` can update from GitHub Rele
 3. Configure IMAP/SMTP and Fluent Forms mapping under **Support Desk** in wp-admin.
 
 == Changelog ==
+
+= 2.0.4 =
+* Bridge SMTP: register for global `wp_mail` when scope is `all_wp_mail` (WooCommerce checkout, REST previews, storefront mail).
+* Fixes From/Reply-To headers for global scope in `class-bridge-smtp.php`.
+* See docs/GITHUB_RELEASE_NOTES_2.0.4.md.
 
 = 2.0.3 =
 * GitHub Release updater for production ZIP installs (see README and docs/GITHUB_RELEASE_NOTES_2.0.3.md).

@@ -4,6 +4,19 @@
 
 _No pending changes._
 
+## [2.0.4] - 2026-07-27
+
+**Bridge SMTP global scope fix** — aligns production with hotfix commit `6d9261d`.
+
+### Fixed
+
+- **`fluent-imap-support-desk.php`** — load Bridge SMTP early when `biopentra_inbox_smtp_scope` is `all_wp_mail`, so WooCommerce checkout, REST, and other `wp_mail()` callers use Bridge SMTP outside admin/cron contexts.
+- **`includes/class-bridge-smtp.php`** — apply From/Reply-To overrides for `all_wp_mail` scope (same as plugin-only path).
+
+### Notes
+
+- No database or REST namespace changes. Upgrade from **2.0.3** is a file replace only.
+
 ## [2.0.3] - 2026-05-19
 
 **GitHub Release updater** — production installs and updates from GitHub Release ZIP assets.

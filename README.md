@@ -57,7 +57,7 @@ Or filter: `add_filter( 'fisd_github_updater_enabled', '__return_false' );`
 
 Installs with `-dev`, `-snapshot`, `-alpha`, `-beta`, or `-rc` in the version string are not prompted to “update” to an older stable release unless the stable version is greater than the install base.
 
-**Latest stable release:** [v2.0.3](https://github.com/magpern/fluent-imap-support-desk/releases/tag/v2.0.3) — asset `fluent-imap-support-desk-2.0.3.zip`.
+**Latest stable release:** [v2.0.4](https://github.com/magpern/fluent-imap-support-desk/releases/tag/v2.0.4) — asset `fluent-imap-support-desk-2.0.4.zip`.
 
 ## Development
 
