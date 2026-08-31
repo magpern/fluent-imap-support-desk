@@ -4,7 +4,7 @@ Tags: support, fluent forms, imap, smtp, helpdesk, tickets
 Requires at least: 6.0
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 2.0.4
+Stable tag: 2.0.5
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -25,6 +25,9 @@ Production sites on `WP_ENVIRONMENT_TYPE=production` can update from GitHub Rele
 3. Configure IMAP/SMTP and Fluent Forms mapping under **Support Desk** in wp-admin.
 
 == Changelog ==
+
+= 2.0.5 =
+* Fix bulk archive (and mark read/unread) on the ticket list — actions now run before admin headers so redirect succeeds instead of white-screening.
 
 = 2.0.4 =
 * Bridge SMTP: register for global `wp_mail` when scope is `all_wp_mail` (WooCommerce checkout, REST previews, storefront mail).

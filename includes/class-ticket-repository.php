@@ -214,6 +214,29 @@ class Biopentra_Contact_Inbox_Ticket_Repository {
 	}
 
 	/**
+	 * Ticket IDs matching list filters (for bulk “select all matching” actions).
+	 *
+	 * @param array<string, mixed> $args desk_status, search.
+	 * @return array<int, int>
+	 */
+	public static function list_ticket_ids( array $args ) {
+		global $wpdb;
+		$table = $wpdb->prefix . 'biopentra_inbox_tickets';
+
+		list( $where_sql, $params ) = self::build_list_where( $args );
+
+		if ( ! empty( $params ) ) {
+			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+			$sql = $wpdb->prepare( "SELECT id FROM {$table} WHERE {$where_sql}", $params );
+		} else {
+			$sql = "SELECT id FROM {$table} WHERE {$where_sql}";
+		}
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
+		$ids = $wpdb->get_col( $sql );
+		return array_values( array_map( 'intval', $ids ) );
+	}
+
+	/**
 	 * @param array<string, mixed> $args desk_status, search, paged, per_page.
 	 * @return array{where_sql: string, params: array<int, mixed>}
 	 */

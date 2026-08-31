@@ -102,7 +102,17 @@ class Biopentra_Contact_Inbox_List_Table extends WP_List_Table {
 			return;
 		}
 		$ids = isset( $_POST['ticket'] ) ? array_map( 'absint', (array) wp_unslash( $_POST['ticket'] ) ) : array();
-		$ids = array_filter( $ids );
+		$ids = array_values( array_filter( $ids ) );
+		if ( empty( $ids ) && ! empty( $_POST['all_tickets'] ) ) {
+			$desk = isset( $_POST['desk_status'] ) ? sanitize_key( wp_unslash( $_POST['desk_status'] ) ) : 'all';
+			$s    = isset( $_POST['s'] ) ? sanitize_text_field( wp_unslash( $_POST['s'] ) ) : '';
+			$ids  = Biopentra_Contact_Inbox_Ticket_Repository::list_ticket_ids(
+				array(
+					'desk_status' => $desk,
+					'search'      => $s,
+				)
+			);
+		}
 		if ( empty( $ids ) ) {
 			return;
 		}

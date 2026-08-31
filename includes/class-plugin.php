@@ -28,6 +28,7 @@ class Biopentra_Contact_Inbox_Plugin {
 
 	public function init() {
 		add_action( 'admin_init', array( $this, 'register_settings' ) );
+		add_action( 'admin_init', array( $this, 'maybe_process_ticket_bulk_action' ) );
 		add_action( 'admin_menu', array( $this, 'register_menu' ) );
 		add_action( 'admin_post_biopentra_inbox_reply', array( $this, 'handle_reply_post' ) );
 		add_action( 'admin_post_biopentra_inbox_run_imap_sync', array( $this, 'handle_run_imap_sync' ) );
@@ -55,6 +56,13 @@ class Biopentra_Contact_Inbox_Plugin {
 
 	public function register_settings() {
 		Biopentra_Contact_Inbox_Settings::register();
+	}
+
+	/**
+	 * Handle ticket list bulk POST before admin headers (redirect must run early).
+	 */
+	public function maybe_process_ticket_bulk_action() {
+		Biopentra_Contact_Inbox_List_Table::process_bulk_request();
 	}
 
 	public function register_menu() {
@@ -185,8 +193,6 @@ class Biopentra_Contact_Inbox_Plugin {
 	 * @param int $form_id Resolved form ID (may be 0).
 	 */
 	private function render_ticket_list( $form_id ) {
-		Biopentra_Contact_Inbox_List_Table::process_bulk_request();
-
 		echo '<div class="wrap">';
 		echo '<h1>' . esc_html__( 'Tickets', 'biopentra-contact-inbox' ) . '</h1>';
 

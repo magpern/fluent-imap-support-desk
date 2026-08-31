@@ -4,6 +4,20 @@
 
 _No pending changes._
 
+## [2.0.5] - 2026-08-31
+
+**Bulk archive fix** — ticket list bulk actions no longer white-screen.
+
+### Fixed
+
+- **`includes/class-plugin.php`** — process ticket bulk POST on `admin_init` (before admin headers) so archive/mark-read redirects succeed instead of calling `exit` after output has started.
+- **`includes/class-list-table.php`** — support bulk “select all matching tickets” via `all_tickets` POST flag.
+- **`includes/class-ticket-repository.php`** — add `list_ticket_ids()` for bulk actions across the full filtered result set.
+
+### Notes
+
+- No database or REST namespace changes. Upgrade from **2.0.4** is a file replace only.
+
 ## [2.0.4] - 2026-07-27
 
 **Bridge SMTP global scope fix** — aligns production with hotfix commit `6d9261d`.
