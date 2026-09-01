@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       Fluent IMAP Support Desk
  * Description:       Support desk bridging Fluent Forms tickets with IMAP/SMTP (Proton Bridge and external mail worker compatible).
- * Version:           2.0.5
+ * Version:           2.0.6
  * Requires at least: 6.0
  * Requires PHP:      7.4
  * Author:            Fluent IMAP Support Desk
@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 if ( ! defined( 'BIOPENTRA_INBOX_VERSION' ) ) {
-	define( 'BIOPENTRA_INBOX_VERSION', '2.0.5' );
+	define( 'BIOPENTRA_INBOX_VERSION', '2.0.6' );
 }
 
 if ( ! defined( 'BIOPENTRA_INBOX_PATH' ) ) {
@@ -169,9 +169,19 @@ function biopentra_inbox_init() {
 	require_once BIOPENTRA_INBOX_PATH . 'includes/class-list-table.php';
 	require_once BIOPENTRA_INBOX_PATH . 'includes/class-admin-detail.php';
 	require_once BIOPENTRA_INBOX_PATH . 'includes/class-plugin.php';
-	require_once BIOPENTRA_INBOX_PATH . 'includes/class-github-updater.php';
-
-	FISD_Github_Updater::maybe_init();
+	/*
+	 * Automatic updates via the private update server. Define PRIVATE_UPDATE_SERVER
+	 * (scheme + host, no trailing slash) in wp-config.php to enable; when it is
+	 * not defined the plugin does not check for updates.
+	 */
+	if ( defined( 'PRIVATE_UPDATE_SERVER' ) && PRIVATE_UPDATE_SERVER ) {
+		require_once BIOPENTRA_INBOX_PATH . 'lib/plugin-update-checker/plugin-update-checker.php';
+		\YahnisElsts\PluginUpdateChecker\v5\PucFactory::buildUpdateChecker(
+			rtrim( (string) PRIVATE_UPDATE_SERVER, '/' ) . '/?action=get_metadata&slug=fluent-imap-support-desk',
+			BIOPENTRA_INBOX_PATH . 'fluent-imap-support-desk.php',
+			'fluent-imap-support-desk'
+		);
+	}
 
 	Biopentra_Contact_Inbox_Activator::maybe_upgrade();
 	Biopentra_Contact_Inbox_Ticket_Backfill::maybe_run_to_email_chunk();
