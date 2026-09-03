@@ -2,10 +2,11 @@
 /**
  * Plugin Name:       Fluent IMAP Support Desk
  * Description:       Support desk bridging Fluent Forms tickets with IMAP/SMTP (Proton Bridge and external mail worker compatible).
- * Version:           2.0.6
+ * Version:           2.0.7
  * Requires at least: 6.0
  * Requires PHP:      7.4
- * Author:            Fluent IMAP Support Desk
+ * Author:            Magpern
+ * Author URI:        https://github.com/magpern
  * Text Domain:       biopentra-contact-inbox
  *
  * Compatibility: internal constants, options, tables, cron hooks, and REST namespace
@@ -19,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 if ( ! defined( 'BIOPENTRA_INBOX_VERSION' ) ) {
-	define( 'BIOPENTRA_INBOX_VERSION', '2.0.6' );
+	define( 'BIOPENTRA_INBOX_VERSION', '2.0.7' );
 }
 
 if ( ! defined( 'BIOPENTRA_INBOX_PATH' ) ) {

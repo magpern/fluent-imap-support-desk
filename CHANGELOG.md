@@ -4,6 +4,22 @@
 
 _No pending changes._
 
+## [2.0.7] - 2026-09-03
+
+**Author metadata fix** — plugin header no longer lists itself as its own author.
+
+### Fixed
+
+- **`fluent-imap-support-desk.php`** — set `Author: Magpern` (was `Fluent IMAP Support Desk`) and add `Author URI`.
+
+### Notes
+
+- No code, database, or REST namespace changes. Upgrade from **2.0.6** is a file replace only.
+
+## [2.0.6] - 2026-09-03
+
+**Self-update via private update server.**
+
 ## [2.0.5] - 2026-08-31
 
 **Bulk archive fix** — ticket list bulk actions no longer white-screen.
