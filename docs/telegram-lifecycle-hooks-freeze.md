@@ -74,3 +74,12 @@ into `Biopentra_Contact_Inbox_Ticket_Reply::send( $ticket_id, $to, $subject, $bo
 admin handler now calls it, and Universal Telegram's reply handler calls it instead of the bare
 mailer. No behaviour change for WP-admin replies; contract towards Telegram (strict `true` on
 success, `WP_Error` on failure) is unchanged.
+
+## Addendum 2 — 2026-09-19 (request-scope loading)
+
+The plugin loads its runtime only for admin, cron, WP-CLI or global-SMTP requests; a Telegram
+webhook (public REST) loads only the REST-import subset. `biopentra_inbox_load_reply_runtime()`
+(main plugin file, idempotent) loads exactly the classes needed to read tickets and call
+`Ticket_Reply::send()` (ticket/message/submission/reply repositories, mailer, reply template, SMTP
+bridge). Universal Telegram calls it before touching the desk. The lifecycle-hooks class is
+required by both the runtime and the REST-import loader so hooks fire in every ingestion path.

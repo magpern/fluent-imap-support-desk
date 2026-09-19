@@ -140,6 +140,35 @@ function biopentra_inbox_should_load_runtime() {
 	return false;
 }
 
+/**
+ * Load only what is needed to read tickets and send a ticket reply from a request that does not
+ * load the full runtime (e.g. a Universal Telegram webhook or digest job). Idempotent.
+ */
+function biopentra_inbox_load_reply_runtime() {
+	static $loaded = false;
+	if ( $loaded ) {
+		return;
+	}
+	$loaded = true;
+	foreach ( array(
+		'class-ticket-ref.php',
+		'class-subject-normalizer.php',
+		'class-message-id.php',
+		'class-form-resolver.php',
+		'class-submission-repository.php',
+		'class-reply-repository.php',
+		'class-ticket-repository.php',
+		'class-message-repository.php',
+		'class-bridge-diagnostics.php',
+		'class-email-reply-template.php',
+		'class-mailer.php',
+		'class-ticket-reply.php',
+	) as $file ) {
+		require_once BIOPENTRA_INBOX_PATH . 'includes/' . $file;
+	}
+	biopentra_inbox_bridge_smtp_init_once();
+}
+
 function biopentra_inbox_init() {
 	biopentra_inbox_maybe_init_smtp();
 	if ( ! biopentra_inbox_should_load_runtime() ) {
