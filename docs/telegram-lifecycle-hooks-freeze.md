@@ -17,7 +17,7 @@ listener can never break ingestion:
 | `biopentra_contact_inbox/message_added` | `Inbound_Import::import_payload()` | inbound message joined an existing ticket, after `COMMIT`; skipped when the sender is the desk's own address |
 
 `$meta` keys: `source` (`email`|`fluent`), `subject`, `customer_email`, `customer_name`,
-`message_text` (plain text), `message_row_id` (inserted message id), plus
+`message_text` (plain text), `message_row_id` (inserted message id), `ticket_number` (customer-facing number, added by `fire()`), plus
 `direction = 'inbound'` for `message_added`.
 
 A new imported ticket emits only `ticket_created`; a later inbound email emits only

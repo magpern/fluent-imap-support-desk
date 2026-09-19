@@ -26,6 +26,10 @@ class Biopentra_Contact_Inbox_Lifecycle_Hooks {
 	 */
 	public static function fire( $hook, $ticket_id, array $meta ) {
 		try {
+			if ( ! isset( $meta['ticket_number'] ) ) {
+				$ticket                = class_exists( 'Biopentra_Contact_Inbox_Ticket_Repository', false ) ? Biopentra_Contact_Inbox_Ticket_Repository::get( (int) $ticket_id ) : null;
+				$meta['ticket_number'] = $ticket && isset( $ticket->ticket_number ) && (int) $ticket->ticket_number > 0 ? (int) $ticket->ticket_number : (int) $ticket_id;
+			}
 			do_action( $hook, (int) $ticket_id, $meta );
 		} catch ( \Throwable $e ) { // phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedCatch
 		}
