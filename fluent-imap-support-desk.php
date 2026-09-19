@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       Fluent IMAP Support Desk
  * Description:       Support desk bridging Fluent Forms tickets with IMAP/SMTP (Proton Bridge and external mail worker compatible).
- * Version:           2.0.7
+ * Version:           2.1.0
  * Requires at least: 6.0
  * Requires PHP:      7.4
  * Author:            Magpern
@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 if ( ! defined( 'BIOPENTRA_INBOX_VERSION' ) ) {
-	define( 'BIOPENTRA_INBOX_VERSION', '2.0.7' );
+	define( 'BIOPENTRA_INBOX_VERSION', '2.1.0' );
 }
 
 if ( ! defined( 'BIOPENTRA_INBOX_PATH' ) ) {
@@ -154,6 +154,7 @@ function biopentra_inbox_init() {
 	require_once BIOPENTRA_INBOX_PATH . 'includes/class-reply-repository.php';
 	require_once BIOPENTRA_INBOX_PATH . 'includes/class-ticket-repository.php';
 	require_once BIOPENTRA_INBOX_PATH . 'includes/class-message-repository.php';
+	require_once BIOPENTRA_INBOX_PATH . 'includes/class-lifecycle-hooks.php';
 	require_once BIOPENTRA_INBOX_PATH . 'includes/class-inbound-import.php';
 	biopentra_inbox_bridge_smtp_init_once();
 	require_once BIOPENTRA_INBOX_PATH . 'includes/class-ticket-backfill.php';
@@ -202,6 +203,7 @@ function biopentra_inbox_rest_api_init() {
 	require_once BIOPENTRA_INBOX_PATH . 'includes/class-message-id.php';
 	require_once BIOPENTRA_INBOX_PATH . 'includes/class-ticket-repository.php';
 	require_once BIOPENTRA_INBOX_PATH . 'includes/class-message-repository.php';
+	require_once BIOPENTRA_INBOX_PATH . 'includes/class-lifecycle-hooks.php';
 	require_once BIOPENTRA_INBOX_PATH . 'includes/class-inbound-import.php';
 	require_once BIOPENTRA_INBOX_PATH . 'includes/class-rest-worker.php';
 	Biopentra_Contact_Inbox_Rest_Worker::register_routes();

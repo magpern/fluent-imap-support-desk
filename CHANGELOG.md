@@ -4,6 +4,19 @@
 
 _No pending changes._
 
+## [2.1.0] - 2026-09-19
+
+**Lifecycle hooks and ticket delete** — optional integration points for Universal Telegram and a fast way to remove spam.
+
+### Added
+
+- **Lifecycle actions** `biopentra_contact_inbox/contact_request_submitted`, `…/ticket_created` and `…/message_added` (mutually exclusive; fired after commit; listener exceptions are swallowed). See `docs/telegram-lifecycle-hooks-freeze.md`.
+- **Delete (spam)** button on the ticket detail view (`admin_post_biopentra_inbox_ticket_delete`, nonce + capability, confirmation prompt). Single-ticket hard delete of the ticket and its messages.
+
+### Notes
+
+- No database or REST changes. `ensure_ticket_for_submission()` gained an optional `$fire_hooks` argument (default `false`).
+
 ## [2.0.7] - 2026-09-03
 
 **Author metadata fix** — plugin header no longer lists itself as its own author.

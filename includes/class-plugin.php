@@ -34,6 +34,7 @@ class Biopentra_Contact_Inbox_Plugin {
 		add_action( 'admin_post_biopentra_inbox_run_imap_sync', array( $this, 'handle_run_imap_sync' ) );
 		add_action( 'admin_post_biopentra_inbox_migrate_fluent', array( $this, 'handle_migrate_fluent' ) );
 		add_action( 'admin_post_biopentra_inbox_ticket_status', array( $this, 'handle_ticket_status' ) );
+		add_action( 'admin_post_biopentra_inbox_ticket_delete', array( $this, 'handle_ticket_delete' ) );
 		add_action( 'admin_post_biopentra_inbox_rotate_worker_token', array( $this, 'handle_rotate_worker_token' ) );
 		add_action( 'admin_post_biopentra_inbox_check_worker_http_health', array( $this, 'handle_check_worker_http_health' ) );
 		add_action( 'admin_post_biopentra_inbox_trigger_worker_mailbox_check', array( $this, 'handle_trigger_worker_mailbox_check' ) );
@@ -310,6 +311,10 @@ class Biopentra_Contact_Inbox_Plugin {
 
 		if ( ! empty( $_GET['reply_sent'] ) && '1' === $_GET['reply_sent'] ) {
 			echo '<div class="notice notice-success is-dismissible"><p>' . esc_html__( 'Reply sent.', 'biopentra-contact-inbox' ) . '</p></div>';
+		}
+
+		if ( ! empty( $_GET['bsd_deleted'] ) && '1' === $_GET['bsd_deleted'] ) {
+			echo '<div class="notice notice-success is-dismissible"><p>' . esc_html__( 'Ticket deleted.', 'biopentra-contact-inbox' ) . '</p></div>';
 		}
 
 		if ( ! empty( $_GET['bsd_status'] ) && '1' === $_GET['bsd_status'] ) {
@@ -747,6 +752,32 @@ class Biopentra_Contact_Inbox_Plugin {
 					'page'        => 'biopentra-inbox',
 					'ticket_id'   => $ticket_id,
 					'bsd_status'  => '1',
+				),
+				admin_url( 'admin.php' )
+			)
+		);
+		exit;
+	}
+
+	public function handle_ticket_delete() {
+		if ( ! current_user_can( BIOPENTRA_INBOX_CAP ) ) {
+			wp_die( esc_html__( 'You do not have permission to delete tickets.', 'biopentra-contact-inbox' ) );
+		}
+
+		$ticket_id = isset( $_POST['ticket_id'] ) ? (int) $_POST['ticket_id'] : 0;
+		if ( $ticket_id <= 0 ) {
+			wp_die( esc_html__( 'Missing ticket.', 'biopentra-contact-inbox' ) );
+		}
+
+		check_admin_referer( 'biopentra_inbox_ticket_delete_' . $ticket_id );
+
+		Biopentra_Contact_Inbox_Ticket_Repository::delete_ticket_and_messages( $ticket_id );
+
+		wp_safe_redirect(
+			add_query_arg(
+				array(
+					'page'        => 'biopentra-inbox',
+					'bsd_deleted' => '1',
 				),
 				admin_url( 'admin.php' )
 			)

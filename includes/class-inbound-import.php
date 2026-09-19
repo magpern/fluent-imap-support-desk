@@ -225,6 +225,21 @@ class Biopentra_Contact_Inbox_Inbound_Import {
 				$wpdb->query( 'COMMIT' );
 			}
 
+			$hook_meta = array(
+				'source'         => 'email',
+				'subject'        => $subject !== '' ? $subject : __( '(no subject)', 'biopentra-contact-inbox' ),
+				'customer_email' => $from_email,
+				'customer_name'  => $from_name,
+				'message_text'   => Biopentra_Contact_Inbox_Lifecycle_Hooks::plain_message_text( $body_text, $body_html ),
+				'message_row_id' => (int) $msg_ins,
+			);
+			if ( $created_ticket ) {
+				Biopentra_Contact_Inbox_Lifecycle_Hooks::fire( Biopentra_Contact_Inbox_Lifecycle_Hooks::TICKET_CREATED, $ticket_id, $hook_meta );
+			} elseif ( ! Biopentra_Contact_Inbox_Lifecycle_Hooks::is_own_address( $from_email ) ) {
+				$hook_meta['direction'] = 'inbound';
+				Biopentra_Contact_Inbox_Lifecycle_Hooks::fire( Biopentra_Contact_Inbox_Lifecycle_Hooks::MESSAGE_ADDED, $ticket_id, $hook_meta );
+			}
+
 			return array(
 				'success' => true,
 				'status'  => 'imported',

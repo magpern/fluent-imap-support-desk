@@ -119,11 +119,13 @@ class Biopentra_Contact_Inbox_Fluent_Migration {
 	/**
 	 * Ensure a single Fluent submission has a ticket (for legacy URLs).
 	 *
-	 * @param int $submission_id Submission ID.
-	 * @param int $form_id       Form ID.
+	 * @param int  $submission_id Submission ID.
+	 * @param int  $form_id       Form ID.
+	 * @param bool $fire_hooks    Emit the contact_request_submitted lifecycle hook when this call creates the ticket.
+	 *                            Only the live-submission handler opts in; lazy legacy/backfill callers must not notify.
 	 * @return int|false Ticket ID.
 	 */
-	public static function ensure_ticket_for_submission( $submission_id, $form_id ) {
+	public static function ensure_ticket_for_submission( $submission_id, $form_id, $fire_hooks = false ) {
 		$submission_id = (int) $submission_id;
 		$form_id       = (int) $form_id;
 		if ( $submission_id <= 0 || $form_id <= 0 ) {
@@ -165,7 +167,7 @@ class Biopentra_Contact_Inbox_Fluent_Migration {
 			return false;
 		}
 		$body_text = wp_json_encode( $data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES );
-		Biopentra_Contact_Inbox_Message_Repository::insert(
+		$message_row_id = Biopentra_Contact_Inbox_Message_Repository::insert(
 			array(
 				'ticket_id'   => $tid,
 				'direction'   => 'inbound',
@@ -180,6 +182,27 @@ class Biopentra_Contact_Inbox_Fluent_Migration {
 				'created_at'  => $created,
 			)
 		);
+		if ( $fire_hooks ) {
+			$message_text = '';
+			if ( ! empty( $data['message'] ) && is_string( $data['message'] ) ) {
+				$message_text = trim( wp_strip_all_tags( $data['message'] ) );
+			}
+			if ( $message_text === '' ) {
+				$message_text = implode( "\n", Biopentra_Contact_Inbox_Submission_Repository::human_summary_lines( $data ) );
+			}
+			Biopentra_Contact_Inbox_Lifecycle_Hooks::fire(
+				Biopentra_Contact_Inbox_Lifecycle_Hooks::CONTACT_REQUEST_SUBMITTED,
+				(int) $tid,
+				array(
+					'source'         => 'fluent',
+					'subject'        => $subject,
+					'customer_email' => $email,
+					'customer_name'  => $name,
+					'message_text'   => $message_text,
+					'message_row_id' => (int) $message_row_id,
+				)
+			);
+		}
 		return $tid;
 	}
 }
