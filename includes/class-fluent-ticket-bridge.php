@@ -67,7 +67,7 @@ class Biopentra_Contact_Inbox_Fluent_Ticket_Bridge {
 			if ( (int) $form->id !== self::configured_form_id() ) {
 				return;
 			}
-			Biopentra_Contact_Inbox_Fluent_Migration::ensure_ticket_for_submission( $insert_id, (int) $form->id );
+			Biopentra_Contact_Inbox_Fluent_Migration::ensure_ticket_for_submission( $insert_id, (int) $form->id, true );
 		} catch ( \Throwable $e ) { // phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedCatch
 		}
 	}

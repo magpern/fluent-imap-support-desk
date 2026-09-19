@@ -147,6 +147,14 @@ class Biopentra_Contact_Inbox_Admin_Detail {
 		submit_button( __( 'Update status', 'biopentra-contact-inbox' ), 'secondary small', 'submit', false );
 		echo '</form>';
 
+		$confirm = esc_js( __( 'Delete this ticket and all its messages? This cannot be undone.', 'biopentra-contact-inbox' ) );
+		echo '<form method="post" action="' . esc_url( $action ) . '" style="margin:0 0 16px 12px;display:inline-block;" onsubmit="return confirm(\'' . $confirm . '\');">';
+		echo '<input type="hidden" name="action" value="biopentra_inbox_ticket_delete" />';
+		wp_nonce_field( 'biopentra_inbox_ticket_delete_' . $tid );
+		echo '<input type="hidden" name="ticket_id" value="' . esc_attr( (string) $tid ) . '" />';
+		submit_button( __( 'Delete (spam)', 'biopentra-contact-inbox' ), 'delete small', 'submit', false );
+		echo '</form>';
+
 		echo '<h3>' . esc_html__( 'Ticket details', 'biopentra-contact-inbox' ) . '</h3>';
 		echo '<table class="widefat striped"><tbody>';
 		echo '<tr><th>' . esc_html__( 'Ticket #', 'biopentra-contact-inbox' ) . '</th><td>';

@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       Fluent IMAP Support Desk
  * Description:       Support desk bridging Fluent Forms tickets with IMAP/SMTP (Proton Bridge and external mail worker compatible).
- * Version:           2.0.7
+ * Version:           2.1.0
  * Requires at least: 6.0
  * Requires PHP:      7.4
  * Author:            Magpern
@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 if ( ! defined( 'BIOPENTRA_INBOX_VERSION' ) ) {
-	define( 'BIOPENTRA_INBOX_VERSION', '2.0.7' );
+	define( 'BIOPENTRA_INBOX_VERSION', '2.1.0' );
 }
 
 if ( ! defined( 'BIOPENTRA_INBOX_PATH' ) ) {
@@ -140,6 +140,35 @@ function biopentra_inbox_should_load_runtime() {
 	return false;
 }
 
+/**
+ * Load only what is needed to read tickets and send a ticket reply from a request that does not
+ * load the full runtime (e.g. a Universal Telegram webhook or digest job). Idempotent.
+ */
+function biopentra_inbox_load_reply_runtime() {
+	static $loaded = false;
+	if ( $loaded ) {
+		return;
+	}
+	$loaded = true;
+	foreach ( array(
+		'class-ticket-ref.php',
+		'class-subject-normalizer.php',
+		'class-message-id.php',
+		'class-form-resolver.php',
+		'class-submission-repository.php',
+		'class-reply-repository.php',
+		'class-ticket-repository.php',
+		'class-message-repository.php',
+		'class-bridge-diagnostics.php',
+		'class-email-reply-template.php',
+		'class-mailer.php',
+		'class-ticket-reply.php',
+	) as $file ) {
+		require_once BIOPENTRA_INBOX_PATH . 'includes/' . $file;
+	}
+	biopentra_inbox_bridge_smtp_init_once();
+}
+
 function biopentra_inbox_init() {
 	biopentra_inbox_maybe_init_smtp();
 	if ( ! biopentra_inbox_should_load_runtime() ) {
@@ -154,6 +183,7 @@ function biopentra_inbox_init() {
 	require_once BIOPENTRA_INBOX_PATH . 'includes/class-reply-repository.php';
 	require_once BIOPENTRA_INBOX_PATH . 'includes/class-ticket-repository.php';
 	require_once BIOPENTRA_INBOX_PATH . 'includes/class-message-repository.php';
+	require_once BIOPENTRA_INBOX_PATH . 'includes/class-lifecycle-hooks.php';
 	require_once BIOPENTRA_INBOX_PATH . 'includes/class-inbound-import.php';
 	biopentra_inbox_bridge_smtp_init_once();
 	require_once BIOPENTRA_INBOX_PATH . 'includes/class-ticket-backfill.php';
@@ -166,6 +196,7 @@ function biopentra_inbox_init() {
 	require_once BIOPENTRA_INBOX_PATH . 'includes/class-fluent-ticket-bridge.php';
 	require_once BIOPENTRA_INBOX_PATH . 'includes/class-email-reply-template.php';
 	require_once BIOPENTRA_INBOX_PATH . 'includes/class-mailer.php';
+	require_once BIOPENTRA_INBOX_PATH . 'includes/class-ticket-reply.php';
 	require_once BIOPENTRA_INBOX_PATH . 'includes/class-settings.php';
 	require_once BIOPENTRA_INBOX_PATH . 'includes/class-list-table.php';
 	require_once BIOPENTRA_INBOX_PATH . 'includes/class-admin-detail.php';
@@ -202,6 +233,7 @@ function biopentra_inbox_rest_api_init() {
 	require_once BIOPENTRA_INBOX_PATH . 'includes/class-message-id.php';
 	require_once BIOPENTRA_INBOX_PATH . 'includes/class-ticket-repository.php';
 	require_once BIOPENTRA_INBOX_PATH . 'includes/class-message-repository.php';
+	require_once BIOPENTRA_INBOX_PATH . 'includes/class-lifecycle-hooks.php';
 	require_once BIOPENTRA_INBOX_PATH . 'includes/class-inbound-import.php';
 	require_once BIOPENTRA_INBOX_PATH . 'includes/class-rest-worker.php';
 	Biopentra_Contact_Inbox_Rest_Worker::register_routes();

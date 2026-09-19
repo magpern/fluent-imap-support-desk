@@ -4,7 +4,7 @@ Tags: support, fluent forms, imap, smtp, helpdesk, tickets
 Requires at least: 6.0
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 2.0.7
+Stable tag: 2.1.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -25,6 +25,9 @@ Production sites on `WP_ENVIRONMENT_TYPE=production` can update from GitHub Rele
 3. Configure IMAP/SMTP and Fluent Forms mapping under **Support Desk** in wp-admin.
 
 == Changelog ==
+
+= 2.1.0 =
+* Add optional lifecycle actions (contact_request_submitted, ticket_created, message_added) for Universal Telegram and a "Delete (spam)" button on tickets.
 
 = 2.0.7 =
 * Correct plugin header Author to "Magpern" (was self-referential "Fluent IMAP Support Desk"); add Author URI. No functional change.

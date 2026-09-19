@@ -34,6 +34,7 @@ class Biopentra_Contact_Inbox_Plugin {
 		add_action( 'admin_post_biopentra_inbox_run_imap_sync', array( $this, 'handle_run_imap_sync' ) );
 		add_action( 'admin_post_biopentra_inbox_migrate_fluent', array( $this, 'handle_migrate_fluent' ) );
 		add_action( 'admin_post_biopentra_inbox_ticket_status', array( $this, 'handle_ticket_status' ) );
+		add_action( 'admin_post_biopentra_inbox_ticket_delete', array( $this, 'handle_ticket_delete' ) );
 		add_action( 'admin_post_biopentra_inbox_rotate_worker_token', array( $this, 'handle_rotate_worker_token' ) );
 		add_action( 'admin_post_biopentra_inbox_check_worker_http_health', array( $this, 'handle_check_worker_http_health' ) );
 		add_action( 'admin_post_biopentra_inbox_trigger_worker_mailbox_check', array( $this, 'handle_trigger_worker_mailbox_check' ) );
@@ -312,6 +313,10 @@ class Biopentra_Contact_Inbox_Plugin {
 			echo '<div class="notice notice-success is-dismissible"><p>' . esc_html__( 'Reply sent.', 'biopentra-contact-inbox' ) . '</p></div>';
 		}
 
+		if ( ! empty( $_GET['bsd_deleted'] ) && '1' === $_GET['bsd_deleted'] ) {
+			echo '<div class="notice notice-success is-dismissible"><p>' . esc_html__( 'Ticket deleted.', 'biopentra-contact-inbox' ) . '</p></div>';
+		}
+
 		if ( ! empty( $_GET['bsd_status'] ) && '1' === $_GET['bsd_status'] ) {
 			echo '<div class="notice notice-success is-dismissible"><p>' . esc_html__( 'Ticket status updated.', 'biopentra-contact-inbox' ) . '</p></div>';
 		}
@@ -377,31 +382,10 @@ class Biopentra_Contact_Inbox_Plugin {
 				exit;
 			}
 
-			$result = Biopentra_Contact_Inbox_Mailer::send_ticket_reply( $ticket_id, $to, $subject, $body );
+			$result = Biopentra_Contact_Inbox_Ticket_Reply::send( $ticket_id, $to, $subject, $body, get_current_user_id() );
 			if ( is_wp_error( $result ) ) {
 				wp_safe_redirect( add_query_arg( array( 'page' => 'biopentra-inbox', 'ticket_id' => $ticket_id, 'reply_err' => 'send_failed' ), $back ) );
 				exit;
-			}
-
-			$form_id = Biopentra_Contact_Inbox_Form_Resolver::get_form_id();
-			if ( get_option( 'biopentra_inbox_store_reply_history', 'yes' ) === 'yes' && $form_id > 0 && isset( $ticket->source ) && 'fluent' === $ticket->source && ! empty( $ticket->source_ref ) ) {
-				$sid = (int) $ticket->source_ref;
-				if ( $sid > 0 ) {
-					$tn            = isset( $ticket->ticket_number ) && (int) $ticket->ticket_number > 0 ? (int) $ticket->ticket_number : $ticket_id;
-					$base_sub      = $subject !== '' ? $subject : fisd_get_default_reply_subject();
-					$final_subject = Biopentra_Contact_Inbox_Ticket_Ref::format_subject( $base_sub, $tn );
-					Biopentra_Contact_Inbox_Reply_Repository::insert(
-						array(
-							'submission_id'   => $sid,
-							'form_id'         => $form_id,
-							'admin_user_id'   => get_current_user_id(),
-							'recipient_email' => $to,
-							'subject'         => $final_subject,
-							'body'            => $body,
-							'sent_at'         => current_time( 'mysql' ),
-						)
-					);
-				}
 			}
 
 			wp_safe_redirect( add_query_arg( array( 'page' => 'biopentra-inbox', 'ticket_id' => $ticket_id, 'reply_sent' => '1' ), $back ) );
@@ -747,6 +731,32 @@ class Biopentra_Contact_Inbox_Plugin {
 					'page'        => 'biopentra-inbox',
 					'ticket_id'   => $ticket_id,
 					'bsd_status'  => '1',
+				),
+				admin_url( 'admin.php' )
+			)
+		);
+		exit;
+	}
+
+	public function handle_ticket_delete() {
+		if ( ! current_user_can( BIOPENTRA_INBOX_CAP ) ) {
+			wp_die( esc_html__( 'You do not have permission to delete tickets.', 'biopentra-contact-inbox' ) );
+		}
+
+		$ticket_id = isset( $_POST['ticket_id'] ) ? (int) $_POST['ticket_id'] : 0;
+		if ( $ticket_id <= 0 ) {
+			wp_die( esc_html__( 'Missing ticket.', 'biopentra-contact-inbox' ) );
+		}
+
+		check_admin_referer( 'biopentra_inbox_ticket_delete_' . $ticket_id );
+
+		Biopentra_Contact_Inbox_Ticket_Repository::delete_ticket_and_messages( $ticket_id );
+
+		wp_safe_redirect(
+			add_query_arg(
+				array(
+					'page'        => 'biopentra-inbox',
+					'bsd_deleted' => '1',
 				),
 				admin_url( 'admin.php' )
 			)
