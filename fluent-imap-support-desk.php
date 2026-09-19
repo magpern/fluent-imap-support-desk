@@ -167,6 +167,7 @@ function biopentra_inbox_init() {
 	require_once BIOPENTRA_INBOX_PATH . 'includes/class-fluent-ticket-bridge.php';
 	require_once BIOPENTRA_INBOX_PATH . 'includes/class-email-reply-template.php';
 	require_once BIOPENTRA_INBOX_PATH . 'includes/class-mailer.php';
+	require_once BIOPENTRA_INBOX_PATH . 'includes/class-ticket-reply.php';
 	require_once BIOPENTRA_INBOX_PATH . 'includes/class-settings.php';
 	require_once BIOPENTRA_INBOX_PATH . 'includes/class-list-table.php';
 	require_once BIOPENTRA_INBOX_PATH . 'includes/class-admin-detail.php';

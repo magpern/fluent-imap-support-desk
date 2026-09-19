@@ -61,3 +61,16 @@ Manual on DEV: contact form → one `contact_request_submitted`; fresh email →
 `ticket_created` only; reply email on existing thread → one `message_added` only; listener
 that throws does not break import/submission; Delete removes ticket + messages, rejects
 missing nonce / unprivileged user.
+
+## Addendum 1 — 2026-09-19 (found during Phase 2 code re-read; smallest correction)
+
+The freeze assumed `Mailer::send_ticket_reply()` alone is the WP-admin reply operation. Re-reading
+`Plugin::handle_reply_post()` showed the admin path additionally records the legacy Fluent
+reply-history row (`Reply_Repository::insert`, option `biopentra_inbox_store_reply_history`) for
+`fluent`-source tickets. To keep WP-admin and Telegram replies identical (same email, same
+outbound message, same `pending` state, same history) that post-send step is extracted, unchanged,
+into `Biopentra_Contact_Inbox_Ticket_Reply::send( $ticket_id, $to, $subject, $body, $admin_user_id )`
+(`includes/class-ticket-reply.php`; returns `true` | `WP_Error`, exactly like the mailer). The
+admin handler now calls it, and Universal Telegram's reply handler calls it instead of the bare
+mailer. No behaviour change for WP-admin replies; contract towards Telegram (strict `true` on
+success, `WP_Error` on failure) is unchanged.
